@@ -1,12 +1,13 @@
-import { Input, InputGroup, InputLeftElement, Box } from '@chakra-ui/react';
+import { Input, InputGroup, InputLeftElement, Box, Spinner } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
+  isLoading?: boolean;
 }
 
-export const SearchBar = ({ onSearch }: SearchBarProps) => {
+export const SearchBar = ({ onSearch, isLoading = false }: SearchBarProps) => {
   const [query, setQuery] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -27,7 +28,11 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
     >
       <InputGroup size="lg">
         <InputLeftElement pointerEvents="none">
-          <SearchIcon color="whiteAlpha.700" />
+          {isLoading ? (
+            <Spinner size="sm" color="whiteAlpha.700" />
+          ) : (
+            <SearchIcon color="whiteAlpha.700" />
+          )}
         </InputLeftElement>
         <Input
           placeholder="Buscar cidade..."
@@ -45,6 +50,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
             borderColor: 'whiteAlpha.500',
             boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.3)',
           }}
+          isDisabled={isLoading}
         />
       </InputGroup>
     </Box>

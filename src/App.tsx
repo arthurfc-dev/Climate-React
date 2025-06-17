@@ -1,8 +1,9 @@
-import { ChakraProvider, extendTheme, SimpleGrid, VStack } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme, SimpleGrid, VStack, useToast } from '@chakra-ui/react';
 import { Layout } from './components/Layout';
 import { WeatherCard } from './components/WeatherCard';
 import { SearchBar } from './components/SearchBar';
 import { useState } from 'react';
+import { weatherService, WeatherResponse } from './services/weatherService';
 
 const theme = extendTheme({
   styles: {
@@ -23,33 +24,45 @@ interface WeatherData {
 }
 
 function App() {
-  const [weatherData, setWeatherData] = useState<WeatherData[]>([
-    {
-      city: 'São Paulo',
-      temperature: 25,
-      condition: 'Clear',
-      humidity: 65,
-      windSpeed: 12,
-    },
-    {
-      city: 'Rio de Janeiro',
-      temperature: 28,
-      condition: 'Rain',
-      humidity: 80,
-      windSpeed: 15,
-    },
-  ]);
+  const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
-  const handleSearch = (query: string) => {
-    // TODO: Implementar a busca real com a API
-    console.log('Buscando por:', query);
+  const handleSearch = async (query: string) => {
+    try {
+      setIsLoading(true);
+      const response = await weatherService.getWeatherByCity(query);
+      
+      const newWeatherData: WeatherData = {
+        city: response.name,
+        temperature: Math.round(response.main.temp),
+        condition: response.weather[0].main,
+        humidity: response.main.humidity,
+        windSpeed: Math.round(response.wind.speed * 3.6), // Convertendo m/s para km/h
+      };
+
+      setWeatherData((prev) => {
+        const filtered = prev.filter((w) => w.city !== newWeatherData.city);
+        return [...filtered, newWeatherData];
+      });
+    } catch (error) {
+      toast({
+        title: 'Erro ao buscar dados do clima',
+        description: 'Não foi possível encontrar informações para esta cidade.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <ChakraProvider theme={theme}>
       <Layout>
         <VStack spacing={8} w="100%">
-          <SearchBar onSearch={handleSearch} />
+          <SearchBar onSearch={handleSearch} isLoading={isLoading} />
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} w="100%">
             {weatherData.map((weather) => (
               <WeatherCard key={weather.city} {...weather} />
