@@ -1,3 +1,62 @@
+# Climate React
+
+Uma aplicação web moderna para visualizar informações climáticas de cidades ao redor do mundo, construída com React e TypeScript.
+
+## Características
+
+- Design moderno com efeito glassmorphism
+- Busca de clima por cidade
+- Exibição de temperatura, condições climáticas, umidade e velocidade do vento
+- Interface responsiva
+- Suporte a múltiplas cidades
+
+## Tecnologias Utilizadas
+
+- React
+- TypeScript
+- Vite
+- Chakra UI
+- Axios
+- OpenWeatherMap API
+
+## Configuração
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/seu-usuario/climate-react.git
+cd climate-react
+```
+
+2. Instale as dependências:
+```bash
+npm install
+```
+
+3. Crie um arquivo `.env` na raiz do projeto e adicione sua chave da API do OpenWeatherMap:
+```
+VITE_WEATHER_API_KEY=sua_chave_api_aqui
+```
+
+4. Inicie o servidor de desenvolvimento:
+```bash
+npm run dev
+```
+
+## Como Usar
+
+1. Digite o nome de uma cidade na barra de pesquisa
+2. Pressione Enter ou clique no ícone de busca
+3. As informações climáticas serão exibidas em um card
+4. Você pode buscar por múltiplas cidades
+
+## Contribuindo
+
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT.
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

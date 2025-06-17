@@ -1,4 +1,4 @@
-import { Box, Container } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 interface LayoutProps {
@@ -9,8 +9,13 @@ export const Layout = ({ children }: LayoutProps) => {
   return (
     <Box
       minH="100vh"
+      minW="100vw"
       bgGradient="linear(to-br, blue.400, purple.500)"
-      position="relative"
+      position="fixed"
+      top={0}
+      left={0}
+      right={0}
+      bottom={0}
       _before={{
         content: '""',
         position: 'absolute',
@@ -22,10 +27,13 @@ export const Layout = ({ children }: LayoutProps) => {
         opacity: 0.1,
         zIndex: 0,
       }}
+      zIndex={0}
     >
-      <Container
-        maxW="container.xl"
-        py={8}
+      <Flex
+        minH="100vh"
+        minW="100vw"
+        align="center"
+        justify="center"
         position="relative"
         zIndex={1}
       >
@@ -33,14 +41,16 @@ export const Layout = ({ children }: LayoutProps) => {
           bg="whiteAlpha.200"
           backdropFilter="blur(10px)"
           borderRadius="xl"
-          p={6}
+          p={{ base: 4, md: 8 }}
           boxShadow="xl"
           border="1px solid"
           borderColor="whiteAlpha.300"
+          w={{ base: '95vw', md: '80vw', lg: '70vw', xl: '60vw' }}
+          maxW="1600px"
         >
           {children}
         </Box>
-      </Container>
+      </Flex>
     </Box>
   );
 }; 

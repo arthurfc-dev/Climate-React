@@ -1,5 +1,5 @@
 import { Box, Flex, Text, Icon, VStack, HStack } from '@chakra-ui/react';
-import { WiDaySunny, WiRain, WiSnow, WiCloudy } from 'react-icons/wi';
+import { WiDaySunny, WiRain, WiSnow, WiCloudy, WiThunderstorm, WiFog, WiDust } from 'react-icons/wi';
 
 interface WeatherCardProps {
   city: string;
@@ -10,13 +10,28 @@ interface WeatherCardProps {
 }
 
 const getWeatherIcon = (condition: string) => {
-  switch (condition.toLowerCase()) {
+  const conditionLower = condition.toLowerCase();
+  switch (conditionLower) {
     case 'clear':
+    case 'clear sky':
       return WiDaySunny;
     case 'rain':
+    case 'light rain':
+    case 'moderate rain':
+    case 'heavy rain':
       return WiRain;
     case 'snow':
+    case 'light snow':
+    case 'heavy snow':
       return WiSnow;
+    case 'thunderstorm':
+      return WiThunderstorm;
+    case 'mist':
+    case 'fog':
+      return WiFog;
+    case 'dust':
+    case 'sand':
+      return WiDust;
     default:
       return WiCloudy;
   }
