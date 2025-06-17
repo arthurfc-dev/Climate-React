@@ -1,6 +1,8 @@
-import { ChakraProvider, extendTheme, SimpleGrid } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme, SimpleGrid, VStack } from '@chakra-ui/react';
 import { Layout } from './components/Layout';
 import { WeatherCard } from './components/WeatherCard';
+import { SearchBar } from './components/SearchBar';
+import { useState } from 'react';
 
 const theme = extendTheme({
   styles: {
@@ -12,8 +14,16 @@ const theme = extendTheme({
   },
 });
 
+interface WeatherData {
+  city: string;
+  temperature: number;
+  condition: string;
+  humidity: number;
+  windSpeed: number;
+}
+
 function App() {
-  const mockData = [
+  const [weatherData, setWeatherData] = useState<WeatherData[]>([
     {
       city: 'São Paulo',
       temperature: 25,
@@ -28,16 +38,24 @@ function App() {
       humidity: 80,
       windSpeed: 15,
     },
-  ];
+  ]);
+
+  const handleSearch = (query: string) => {
+    // TODO: Implementar a busca real com a API
+    console.log('Buscando por:', query);
+  };
 
   return (
     <ChakraProvider theme={theme}>
       <Layout>
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-          {mockData.map((weather) => (
-            <WeatherCard key={weather.city} {...weather} />
-          ))}
-        </SimpleGrid>
+        <VStack spacing={8} w="100%">
+          <SearchBar onSearch={handleSearch} />
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} w="100%">
+            {weatherData.map((weather) => (
+              <WeatherCard key={weather.city} {...weather} />
+            ))}
+          </SimpleGrid>
+        </VStack>
       </Layout>
     </ChakraProvider>
   );
