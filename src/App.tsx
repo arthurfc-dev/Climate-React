@@ -1,4 +1,4 @@
-import { ChakraProvider, extendTheme, VStack, useToast, HStack, Box } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme, Flex, useToast, HStack, Box, Select, VStack } from '@chakra-ui/react';
 import { Layout } from './components/Layout';
 import { WeatherCard } from './components/WeatherCard';
 import { SearchBar } from './components/SearchBar';
@@ -74,21 +74,38 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <Layout>
-        <VStack spacing={8} w="100%" align="center" justify="center">
-          <HStack spacing={4} w="100%" justify="center">
-            <Box as="select" value={country} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCountry(e.target.value)}
-              bg="whiteAlpha.200" color="white" borderRadius="md" border="1px solid" borderColor="whiteAlpha.300" p={2} fontWeight="bold">
+        <Flex w="100%" h="100%" align="center" justify="center">
+          <HStack spacing={4} w="100%" maxW="900px" justify="center" align="center">
+            <Select
+              value={country}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCountry(e.target.value)}
+              bg="whiteAlpha.200"
+              color="white"
+              borderRadius="md"
+              border="1px solid"
+              borderColor="whiteAlpha.300"
+              fontWeight="bold"
+              h="48px"
+              fontSize="lg"
+              _focus={{ borderColor: 'whiteAlpha.500', boxShadow: '0 0 0 1px rgba(255,255,255,0.3)' }}
+              _hover={{ borderColor: 'whiteAlpha.400' }}
+              flex={1}
+              minW="120px"
+              maxW="250px"
+            >
               {countries.map(c => (
                 <option key={c.code} value={c.code} style={{ color: 'black' }}>{c.name}</option>
               ))}
+            </Select>
+            <Box flex={2}>
+              <SearchBar onSearch={handleSearch} isLoading={isLoading} />
             </Box>
-            <SearchBar onSearch={handleSearch} isLoading={isLoading} />
           </HStack>
-          <VStack spacing={6} w="100%">
-            {weatherData.map((weather) => (
-              <WeatherCard key={weather.city} {...weather} />
-            ))}
-          </VStack>
+        </Flex>
+        <VStack spacing={6} w="100%">
+          {weatherData.map((weather) => (
+            <WeatherCard key={weather.city} {...weather} />
+          ))}
         </VStack>
       </Layout>
     </ChakraProvider>

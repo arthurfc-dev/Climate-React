@@ -22,9 +22,7 @@ export const SearchBar = ({ onSearch, isLoading = false }: SearchBarProps) => {
       as="form"
       onSubmit={handleSubmit}
       w="100%"
-      maxW="600px"
-      mx="auto"
-      mb={8}
+      mb={0}
     >
       <InputGroup size="lg">
         <InputLeftElement pointerEvents="none">
@@ -51,6 +49,7 @@ export const SearchBar = ({ onSearch, isLoading = false }: SearchBarProps) => {
             boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.3)',
           }}
           isDisabled={isLoading}
+          h="48px"
         />
       </InputGroup>
     </Box>

@@ -47,6 +47,10 @@ export const Layout = ({ children }: LayoutProps) => {
           borderColor="whiteAlpha.300"
           w={{ base: '95vw', md: '80vw', lg: '70vw', xl: '60vw' }}
           maxW="1600px"
+          minH="200px"
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
         >
           {children}
         </Box>
