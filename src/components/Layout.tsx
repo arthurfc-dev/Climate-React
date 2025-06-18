@@ -1,4 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react';
+import { Header } from './Header';
 import type { ReactNode } from 'react';
 
 interface LayoutProps {
@@ -28,14 +29,21 @@ export const Layout = ({ children }: LayoutProps) => {
         zIndex: 0,
       }}
       zIndex={0}
+      display="flex"
+      flexDirection="column"
     >
+      <Header />
       <Flex
-        minH="100vh"
-        minW="100vw"
+        flex={1}
+        w="100%"
         align="center"
         justify="center"
+        direction="column"
         position="relative"
         zIndex={1}
+        minH={0}
+        mt={0}
+        mb={0}
       >
         <Box
           bg="whiteAlpha.200"
@@ -46,8 +54,8 @@ export const Layout = ({ children }: LayoutProps) => {
           boxShadow="xl"
           border="1px solid"
           borderColor="whiteAlpha.300"
-          w={{ base: '95vw', md: '80vw', lg: '70vw', xl: '60vw' }}
-          maxW="1600px"
+          w="100%"
+          maxW="700px"
           minH="200px"
           display="flex"
           flexDirection="column"
