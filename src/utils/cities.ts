@@ -1,0 +1,41 @@
+export const citiesByCountry: Record<string, string[]> = {
+  BR: [
+    'São Paulo',
+    'Rio de Janeiro',
+    'Recife',
+    'Santos',
+    'Paulista',
+    'Pernambuco',
+    'Acre',
+    'Salvador',
+    'Fortaleza',
+    'Curitiba',
+  ],
+  US: [
+    'New York',
+    'Los Angeles',
+    'Chicago',
+    'Miami',
+    'Houston',
+    'San Francisco',
+    'Boston',
+  ],
+  GB: [
+    'London',
+    'Manchester',
+    'Liverpool',
+    'Birmingham',
+  ],
+  FR: [
+    'Paris',
+    'Lyon',
+    'Marseille',
+    'Nice',
+  ],
+  JP: [
+    'Tokyo',
+    'Osaka',
+    'Kyoto',
+    'Nagoya',
+  ],
+}; 

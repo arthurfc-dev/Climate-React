@@ -112,7 +112,7 @@ function App() {
               ))}
             </Select>
             <Box flex={2}>
-              <SearchBar onSearch={handleSearch} isLoading={isLoading} />
+              <SearchBar onSearch={handleSearch} isLoading={isLoading} country={country} />
             </Box>
           </HStack>
           <Flex w="100%" justify="center" align="flex-start" mt={8} position="relative" overflow="visible">
