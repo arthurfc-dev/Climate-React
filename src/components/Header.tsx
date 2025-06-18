@@ -1,4 +1,4 @@
-import { Flex, Text, Link, HStack, Icon, Box, Button, Collapse } from '@chakra-ui/react';
+import { Flex, Text, Link, HStack, Icon, Box, Button, Collapse, Spacer } from '@chakra-ui/react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { FaReact } from 'react-icons/fa';
 import { useState } from 'react';
@@ -29,7 +29,7 @@ export const Header = () => {
         px={{ base: 6, md: 10 }}
         py={2}
         align="center"
-        justify="space-between"
+        justify="center"
         bg="whiteAlpha.200"
         backdropFilter="blur(10px)"
         borderRadius="xl"
@@ -41,13 +41,14 @@ export const Header = () => {
         minH="56px"
         maxH="56px"
       >
-        <HStack spacing={2} align="center">
+        <HStack spacing={2} align="center" flexShrink={0} mr={6}>
+          <Icon as={FaReact} w={6} h={6} color="blue.200" />
           <Text fontSize="xl" fontWeight="bold" color="white" letterSpacing="wide" display="flex" alignItems="center">
             ClimateReact
-            <Icon as={FaReact} w={6} h={6} color="blue.200" ml={2} />
           </Text>
         </HStack>
-        <HStack spacing={0} align="center">
+        <Spacer />
+        <HStack spacing={0} align="center" justify="center" flex={1} maxW="400px">
           {tabInfo.map((tab, idx) => (
             <HStack key={tab.label} spacing={0} align="center">
               {idx > 0 && (
@@ -69,7 +70,9 @@ export const Header = () => {
               </Button>
             </HStack>
           ))}
-          <Text color="whiteAlpha.500" px={2} fontWeight="bold">|</Text>
+        </HStack>
+        <Spacer />
+        <HStack spacing={4} align="center" flexShrink={0} ml={4}>
           <Link href="https://github.com/seu-usuario" isExternal aria-label="GitHub" display="flex" alignItems="center">
             <Icon as={FaGithub} w={5} h={5} color="whiteAlpha.900" _hover={{ color: 'blue.200' }} />
           </Link>
