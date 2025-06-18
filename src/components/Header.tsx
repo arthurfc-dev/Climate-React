@@ -1,5 +1,6 @@
 import { Flex, Text, Link, HStack, Icon, Box, Button, Collapse } from '@chakra-ui/react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaReact } from 'react-icons/fa';
 import { useState } from 'react';
 
 const tabInfo = [
@@ -21,7 +22,7 @@ export const Header = () => {
   const [hoveredTab, setHoveredTab] = useState<number | null>(null);
 
   return (
-    <Box w="auto" maxW="700px" mx="auto" mt={4} mb={4}>
+    <Box w="auto" maxW="700px" mx="auto" mt={4} mb={4} position="relative">
       <Flex
         as="header"
         w="100%"
@@ -37,36 +38,50 @@ export const Header = () => {
         borderColor="whiteAlpha.300"
         position="relative"
         zIndex={10}
+        minH="56px"
+        maxH="56px"
       >
-        <Text fontSize="xl" fontWeight="bold" color="white" letterSpacing="wide">
-          ClimateReact
-        </Text>
-        <HStack spacing={4}>
+        <HStack spacing={2} align="center">
+          <Text fontSize="xl" fontWeight="bold" color="white" letterSpacing="wide" display="flex" alignItems="center">
+            ClimateReact
+            <Icon as={FaReact} w={6} h={6} color="blue.200" ml={2} />
+          </Text>
+        </HStack>
+        <HStack spacing={0} align="center">
           {tabInfo.map((tab, idx) => (
-            <Button
-              key={tab.label}
-              variant="ghost"
-              color="whiteAlpha.900"
-              _hover={{ bg: 'whiteAlpha.300', color: 'blue.200' }}
-              onMouseEnter={() => setHoveredTab(idx)}
-              onMouseLeave={() => setHoveredTab(null)}
-              fontWeight="bold"
-              fontSize="md"
-            >
-              {tab.label}
-            </Button>
+            <HStack key={tab.label} spacing={0} align="center">
+              {idx > 0 && (
+                <Text color="whiteAlpha.500" px={2} fontWeight="bold">|</Text>
+              )}
+              <Button
+                variant="ghost"
+                color="whiteAlpha.900"
+                _hover={{ bg: 'whiteAlpha.300', color: 'blue.200' }}
+                onMouseEnter={() => setHoveredTab(idx)}
+                onMouseLeave={() => setHoveredTab(null)}
+                fontWeight="bold"
+                fontSize="md"
+                px={3}
+                py={2}
+                h="auto"
+              >
+                {tab.label}
+              </Button>
+            </HStack>
           ))}
-          <Link href="https://github.com/seu-usuario" isExternal aria-label="GitHub">
+          <Text color="whiteAlpha.500" px={2} fontWeight="bold">|</Text>
+          <Link href="https://github.com/seu-usuario" isExternal aria-label="GitHub" display="flex" alignItems="center">
             <Icon as={FaGithub} w={5} h={5} color="whiteAlpha.900" _hover={{ color: 'blue.200' }} />
           </Link>
-          <Link href="https://linkedin.com/in/seu-usuario" isExternal aria-label="LinkedIn">
+          <Link href="https://linkedin.com/in/seu-usuario" isExternal aria-label="LinkedIn" display="flex" alignItems="center">
             <Icon as={FaLinkedin} w={5} h={5} color="whiteAlpha.900" _hover={{ color: 'blue.300' }} />
           </Link>
         </HStack>
       </Flex>
-      <Box minH="32px">
+      {/* Texto explicativo em position absolute, não afeta o layout */}
+      <Box position="absolute" left={0} right={0} top="100%" zIndex={20} pointerEvents="none">
         {tabInfo.map((tab, idx) => (
-          <Collapse in={hoveredTab === idx} animateOpacity key={tab.label} unmountOnExit>
+          <Collapse in={hoveredTab === idx} animateOpacity key={tab.label} unmountOnExit style={{ pointerEvents: 'auto' }}>
             <Box
               mt={2}
               px={6}
@@ -77,6 +92,7 @@ export const Header = () => {
               fontSize="md"
               textAlign="center"
               boxShadow="md"
+              pointerEvents="auto"
             >
               {tab.text}
             </Box>
