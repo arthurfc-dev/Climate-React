@@ -49,8 +49,10 @@ export const WeatherCard = ({ city, temperature, condition, humidity, windSpeed 
       boxShadow="xl"
       border="1px solid"
       borderColor="whiteAlpha.400"
-      transition="transform 0.2s"
-      _hover={{ transform: 'scale(1.02)' }}
+      transition="transform 0.2s, box-shadow 0.2s, z-index 0s"
+      position="relative"
+      zIndex={1}
+      _hover={{ transform: 'scale(1.02)', zIndex: 99, boxShadow: '2xl' }}
     >
       <VStack spacing={4} align="stretch">
         <Flex justify="space-between" align="center">

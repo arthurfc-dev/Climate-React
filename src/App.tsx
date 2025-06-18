@@ -1,8 +1,9 @@
-import { ChakraProvider, extendTheme, Flex, useToast, HStack, Box, Select, VStack } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme, Flex, useToast, HStack, Box, Select, VStack, IconButton } from '@chakra-ui/react';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Layout } from './components/Layout';
 import { WeatherCard } from './components/WeatherCard';
 import { SearchBar } from './components/SearchBar';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { weatherService, WeatherError } from './services/weatherService';
 
 const theme = extendTheme({
@@ -36,6 +37,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [country, setCountry] = useState('BR');
   const toast = useToast();
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
 
   const handleSearch = async (query: string) => {
     try {
@@ -71,11 +73,23 @@ function App() {
     }
   };
 
+  const scrollCards = (direction: 'left' | 'right') => {
+    const container = cardsContainerRef.current;
+    if (container) {
+      const scrollAmount = 320; // Largura aproximada de um card + espaçamento
+      if (direction === 'left') {
+        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      } else {
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
     <ChakraProvider theme={theme}>
       <Layout>
-        <Flex w="100%" h="100%" align="center" justify="center">
-          <HStack spacing={4} w="100%" maxW="900px" justify="center" align="center">
+        <VStack spacing={8} w="100%" h="100%" align="center" justify="flex-start">
+          <HStack spacing={4} w="100%" maxW="900px" justify="center" align="center" mt={8}>
             <Select
               value={country}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCountry(e.target.value)}
@@ -101,11 +115,55 @@ function App() {
               <SearchBar onSearch={handleSearch} isLoading={isLoading} />
             </Box>
           </HStack>
-        </Flex>
-        <VStack spacing={6} w="100%">
-          {weatherData.map((weather) => (
-            <WeatherCard key={weather.city} {...weather} />
-          ))}
+          <Flex w="100%" justify="center" align="flex-start" mt={8} position="relative" overflow="visible">
+            {weatherData.length > 0 && (
+              <>
+                <IconButton
+                  aria-label="Scroll left"
+                  icon={<ChevronLeftIcon boxSize={8} />}
+                  onClick={() => scrollCards('left')}
+                  position="absolute"
+                  left={-12}
+                  top="50%"
+                  transform="translateY(-50%)"
+                  zIndex={2}
+                  bg="whiteAlpha.300"
+                  color="white"
+                  _hover={{ bg: 'whiteAlpha.500' }}
+                  isDisabled={weatherData.length <= 1}
+                />
+                <Box
+                  ref={cardsContainerRef}
+                  w="100%"
+                  maxW="1200px"
+                  overflowX="hidden"
+                  overflowY="visible"
+                  py={2}
+                  pb={6}
+                >
+                  <HStack spacing={8} minW="max-content">
+                    {weatherData.map((weather) => (
+                      <WeatherCard key={weather.city} {...weather} />
+                    ))}
+                  </HStack>
+                </Box>
+                <IconButton
+                  aria-label="Scroll right"
+                  icon={<ChevronRightIcon boxSize={8} />}
+                  onClick={() => scrollCards('right')}
+                  position="absolute"
+                  right={-12}
+                  top="50%"
+                  transform="translateY(-50%)"
+                  zIndex={2}
+                  bg="whiteAlpha.300"
+                  color="white"
+                  _hover={{ bg: 'whiteAlpha.500' }}
+                  isDisabled={weatherData.length <= 1}
+                />
+              </>
+            )}
+          </Flex>
         </VStack>
       </Layout>
     </ChakraProvider>

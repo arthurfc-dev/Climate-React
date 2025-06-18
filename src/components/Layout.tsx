@@ -42,6 +42,7 @@ export const Layout = ({ children }: LayoutProps) => {
           backdropFilter="blur(10px)"
           borderRadius="xl"
           p={{ base: 4, md: 8 }}
+          pb={16}
           boxShadow="xl"
           border="1px solid"
           borderColor="whiteAlpha.300"
@@ -51,6 +52,7 @@ export const Layout = ({ children }: LayoutProps) => {
           display="flex"
           flexDirection="column"
           justifyContent="center"
+          overflow="unset"
         >
           {children}
         </Box>
