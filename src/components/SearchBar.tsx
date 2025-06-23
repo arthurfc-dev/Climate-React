@@ -1,7 +1,6 @@
 import { Input, InputGroup, InputLeftElement, Box, Spinner, List, ListItem } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
-import { useState, useRef } from 'react';
-import { citiesByCountry } from '../utils/cities';
+import { useState, useRef, useEffect } from 'react';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -9,12 +8,36 @@ interface SearchBarProps {
   country?: string;
 }
 
+// Cache global para cidades
+let citiesCache: Record<string, string[]> | null = null;
+let citiesPromise: Promise<Record<string, string[]>> | null = null;
+
 export const SearchBar = ({ onSearch, isLoading = false, country = 'BR' }: SearchBarProps) => {
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [cities, setCities] = useState<string[]>([]);
+  const [loadingCities, setLoadingCities] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const cities = citiesByCountry[country] || [];
+  useEffect(() => {
+    let isMounted = true;
+    setLoadingCities(true);
+    const loadCities = async () => {
+      if (!citiesCache) {
+        if (!citiesPromise) {
+          citiesPromise = fetch('/src/utils/cities.json').then(res => res.json());
+        }
+        citiesCache = await citiesPromise;
+      }
+      if (isMounted) {
+        setCities(citiesCache[country] || []);
+        setLoadingCities(false);
+      }
+    };
+    loadCities();
+    return () => { isMounted = false; };
+  }, [country]);
+
   const filteredCities = query.length > 0
     ? cities.filter(city => city.toLowerCase().startsWith(query.toLowerCase()))
     : [];
@@ -38,7 +61,7 @@ export const SearchBar = ({ onSearch, isLoading = false, country = 'BR' }: Searc
     <Box as="form" onSubmit={handleSubmit} w="100%" mb={0} position="relative">
       <InputGroup size="lg">
         <InputLeftElement pointerEvents="none">
-          {isLoading ? (
+          {isLoading || loadingCities ? (
             <Spinner size="sm" color="whiteAlpha.700" />
           ) : (
             <SearchIcon color="whiteAlpha.700" />
@@ -46,7 +69,7 @@ export const SearchBar = ({ onSearch, isLoading = false, country = 'BR' }: Searc
         </InputLeftElement>
         <Input
           ref={inputRef}
-          placeholder="Buscar cidade..."
+          placeholder={loadingCities ? 'Carregando cidades...' : 'Buscar cidade...'}
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -59,13 +82,13 @@ export const SearchBar = ({ onSearch, isLoading = false, country = 'BR' }: Searc
           _placeholder={{ color: 'whiteAlpha.700' }}
           _hover={{ borderColor: 'whiteAlpha.400' }}
           _focus={{ borderColor: 'whiteAlpha.500', boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.3)' }}
-          isDisabled={isLoading}
+          isDisabled={isLoading || loadingCities}
           h="48px"
           autoComplete="off"
           onBlur={() => setTimeout(() => setShowSuggestions(false), 100)}
         />
       </InputGroup>
-      {showSuggestions && filteredCities.length > 0 && (
+      {showSuggestions && filteredCities.length > 0 && !loadingCities && (
         <List
           position="absolute"
           top="52px"
